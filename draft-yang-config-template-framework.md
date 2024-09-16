@@ -122,104 +122,158 @@ d)Parent device instantiating the required data, controls each instance, ie: mer
                  c=z
                 }
 
-# Template Mechanism
+# Template Framework
 
 The templates concept can be achieved with existing yang constructs like grouping and uses statements.
  
  Example:
  
-A)By defining common structures using grouping,you avoid repeating code,ensure consistency,and make future changes easier since modifications only need to happen in one place. 
+## Grouping construct
+ 
+By defining common structures using grouping,you avoid repeating code,ensure consistency,and make future changes easier since modifications only need to happen in one place. 
 
  Example:
-    grouping interface-config {
-                         leaf interface-name {
-                         type string;
-                         }
-                         leaf admin-status {
-                         type boolean;
-                                     }
-                         }
-    Here, the interface-config grouping defines a common structure that could be reused across different YANG modules or different parts of the same module.
-B) "Uses" yang construct: The uses statement applies a previously defined grouping. This allows the grouped set of definitions to be instantiated where needed in the model. 
-    Example:  container interfaces {
-                             list interface {
-                             key "interface-name";
-                             uses interface-config;
-                             }
-                             }
-    In this example, the uses statement applies the interface-config grouping defined earlier.
+ 
+  grouping interface-config {
+ 
+  leaf interface-name {
+  
+  type string;
+  
+  }
+  
+  leaf admin-status {
+  
+  type boolean;
+  
+  }
+  
+}
 
+Here, the interface-config grouping defines a common structure that could be reused across different YANG modules or different parts of the same module.
+ 
+## Uses construct
+The "uses" statement applies a previously defined grouping. This allows the grouped set of definitions to be instantiated where needed in the model. 
+ Example:
+  container interfaces {
+ 
+  list interface {
+  
+  key "interface-name";
+  
+  uses interface-config;
+  
+  }
+  
+ }
+    
+In this example, the uses statement applies the interface-config grouping defined earlier.
+ 
+## Mandatories, Defaults, Leafrefs
 While conceptually, the idea of templates improves the re-usability and consistency factor, there are certain nuances, which needs to be addressed while handling data nodes in the grouping with defaults and mandatories and leafrefs.
 
 If the grouping created with replicable data nodes contains default or mandatory nodes, and such groupings are used both in the template and in the instance, there is a possibility of overwriting the configured value of the template with the default value in the instance due to the merge operation.
 
 When using leafref inside a grouping (which acts as a template), Extra care must be taken on the path specified. This is because grouping is essentially a reusable blueprint, and the leafref path must be resolved correctly when the grouping is used in different contexts.
+
 There are two primary approaches to using leafref in templates:
+ 
 A)Absolute Paths: These reference a specific location in the YANG tree.
+ 
 B)Relative Paths: These are defined relative to the location where the grouping is used.
+ 
 While there is no recommended option to resolve the path, it is a designers choice to choose Absolute path where the referred path is a fixed well defined global path and relative path which could be flexible and re-usable depending on the context in which the groupings are defined.
 
+## Refine construct
 In order to solve the issue with defaults and mandatories, existing yang language provides us with a powerful construct: "refine"
 
 The refine statement in YANG is used to modify or refine the definitions of a grouping when it is applied using the uses statement. This is particularly useful when the same template (or grouping) is reused in different contexts but needs to be adjusted slightly without altering the original grouping definition.
 While the refine statement is powerful, it can only be applied within the context of a uses statement, and it allows fine-tuning of things like mandatory requirements, default values, descriptions, and other constraints.
 
-How refine Works:
 The basic workflow for using refine with templates involves:
-1.Defining a grouping(without mandatories and defaults), which acts as a template.
-2.Applying the grouping with the uses statement.
-3.Using the refine statement to modify specific characteristics of the applied grouping in a particular context(refine mandatories and defaults).
+ 
+1.Defining a grouping(without mandatories and defaults), which can be (re)used in a template and in certain functional instance.
+
+2.Apply the grouping with the uses statement.
+
+3.Use the refine statement to modify specific characteristics of the applied grouping in a particular context(refine mandatories and defaults).
 
 Example of Using refine with Templates
-Step-1: Defining a Grouping (Template) Here, we define a basic grouping for an interface configuration.
+
+Step-1: Defining a Grouping. Here, a basic grouping for an interface configurationis defined devoid of mandatories and defaults
  
 grouping interface-config {
+
     leaf interface-name {
-        type string;
-        mandatory true;
+
+       type string;
+
         description "Name of the interface.";
+
     }
+
     leaf admin-status {
+
         type boolean;
-        default "false";
+
         description "Administrative status of the interface.";
+
     }
-}
-Step-2: Applying the Grouping with uses
- 
-container interfaces {
-    list interface {
-        key "interface-name";
-        uses interface-config;
-    }
+
 }
 
-At this point, we’ve reused the interface-config template for our interface list. Now, we’ll refine this grouping to suit specific use cases.
+Step-2: Applying the Grouping with uses construct
+ 
+container templates {
+
+    list interface {
+
+        key "interface-name";
+
+        uses interface-config;
+
+    }
+
+}
+
+At this point, the interface-config grouping can be (re)used for the templates list as well as functional instance list . refinement to this grouping can be done to suit specific use cases.
 
 Step-3: Refining the Grouping:
-Let’s say in certain contexts we want to refine the interface-config grouping to:
-1.Make the admin-status mandatory in certain cases.
-2.Change the default value of admin-status.
-3.Provide a more specific description for interface-name.
  
-container special-interfaces {
+ In certain contexts refinement would be required to the interface-config grouping:
+ 
+1.Make the admin-status mandatory in templates.
+2.Change the default value of admin-status in templates.
+
+ 
+container templates {
+
     list interface {
+
         key "interface-name";
+
         uses interface-config {
+
             refine admin-status {
+
                 mandatory true;
+
                 default "true";
+
             }
-            refine interface-name {
-                description "Special interface name for critical operations.";
-            }
+
         }
+
     }
+
 }
+
 In this example:
-•We’ve applied the interface-config grouping within the special-interfaces container.
+
+•The interface-config grouping is used within the templates container.
+
 •The admin-status is made mandatory and its default value is set to true (instead of false).
-•The interface-name description is updated to reflect the specific context in which this grouping is being used.
+
 
 # Benefits of Templates in YANG Design
 
