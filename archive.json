@@ -1,0 +1,83 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-12-22T01:43:19.844765+00:00",
+  "repo": "shiyaashrf/YangTemplateFramework",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOMbGP_857qe9w",
+      "title": "Derajara",
+      "url": "https://github.com/shiyaashrf/YangTemplateFramework/pull/1",
+      "state": "MERGED",
+      "author": "derajara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-09-16T19:16:12Z",
+      "updatedAt": "2024-10-10T08:00:01Z",
+      "baseRepository": "shiyaashrf/YangTemplateFramework",
+      "baseRefName": "main",
+      "baseRefOid": "8294fed9ecd736b41169b96fa1dc1e11b3ba5985",
+      "headRepository": "shiyaashrf/YangTemplateFramework",
+      "headRefName": "derajara",
+      "headRefOid": "ac26b66d72733b12fe0e418dba4db358f5c279d5",
+      "closedAt": "2024-10-10T08:00:01Z",
+      "mergedAt": "2024-10-10T08:00:01Z",
+      "mergedBy": "derajara",
+      "mergeCommit": {
+        "oid": "1ed2fcc1a267fd8750b58bf5d303ff17baffac98"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
